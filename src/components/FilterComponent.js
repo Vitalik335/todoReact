@@ -1,10 +1,10 @@
-import { Select, Space, Row, Col } from "antd";
+import { Select, Space, Col } from "antd";
 
 function FilterComponent({ filterTasks }) {
   return (
-    <div className="FilterComponent">
-      <Row justify="end" style={{ marginTop: '10px' }}>
-        <Col span={24}>
+    <Col>
+      <Space.Compact style={{ display:'flex', justifyContent:'end', marginTop: '10px' }}>
+        <div className="ToDoForm">
           <Space wrap>
             <Select
               defaultValue="All"
@@ -19,10 +19,9 @@ function FilterComponent({ filterTasks }) {
               ]}
             />
           </Space>
-          <span style={{ fontWeight: 'bold', marginLeft: '10px' }}>Filter Tasks</span>
-        </Col>
-      </Row>
-    </div>
+        </div>
+      </Space.Compact>
+    </Col>
   );
 }
 

@@ -2,7 +2,7 @@ import ToDoForm from "./ToDoForm";
 import FilterComponent from "./FilterComponent";
 import ToDoList from "./ToDoList";
 import { useState, useEffect } from "react";
-import { Card, Row, Col, Empty  } from "antd";
+import { Card, Row, Col, Empty } from "antd";
 
 function ToDoApp() {
   const [tasks, setTasks] = useState(
@@ -52,22 +52,20 @@ function ToDoApp() {
         <Card
           title={<h1>My To-Do App</h1>}
           bordered={false}
-          style={{ width: 300 }}
+          style={{ width: 500 }}
         >
-          <div className="ToDoApp">
-            <ToDoForm addTask={addTask} />
-            <FilterComponent filterTasks={filterTasks} />
-            {filteredTasks.length === 0 ? (
-              <Empty style={{ marginTop: '10px'}}/>
-            ) : (
-              <ToDoList 
-                tasks={filteredTasks}
-                deleteTask={deleteTask}
-                editTask={editTask}
-                statusTask={statusTask}
-              />
-            )}
-          </div>
+          <ToDoForm addTask={addTask} />
+          <FilterComponent filterTasks={filterTasks} />
+          {filteredTasks.length === 0 ? (
+            <Empty style={{ marginTop: "10px" }} />
+          ) : (
+            <ToDoList
+              tasks={filteredTasks}
+              deleteTask={deleteTask}
+              editTask={editTask}
+              statusTask={statusTask}
+            />
+          )}
         </Card>
       </Col>
     </Row>

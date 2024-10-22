@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, ConfigProvider, Checkbox, Typography, Row, Col } from "antd";
+import { Button, ConfigProvider, Checkbox, Typography, Col } from "antd";
 import { createStyles } from "antd-style";
 
-const { Text } = Typography; // Destructure Text from Typography
+const { Paragraph } = Typography;
 
 function ToDoItem({ task, deleteTask, editTask, statusTask }) {
   const useStyle = createStyles(({ prefixCls, css }) => ({
@@ -37,6 +37,7 @@ function ToDoItem({ task, deleteTask, editTask, statusTask }) {
   const { styles } = useStyle();
   const [isEditing, setIsEditing] = useState(false);
   const [newText, setNewText] = useState(task.text);
+  const [expanded, setExpanded] = useState(false);
 
   const handleEdit = () => {
     editTask(task.id, newText);
@@ -48,71 +49,100 @@ function ToDoItem({ task, deleteTask, editTask, statusTask }) {
     statusTask(task.id, newCompletedStatus);
   };
 
+  const toggleExpand = () => {
+    setExpanded(!expanded);
+  };
+
   return (
     <ConfigProvider
       button={{
         className: styles.linearGradientButton,
       }}
     >
-      <Row justify="center" align="middle">
-        <Col>
-          <div className="ToDoItem">
-            {isEditing ? (
-              <div>
-                <input
-                  type="text"
-                  value={newText}
-                  onChange={(e) => setNewText(e.target.value)}
-                />
-                <button onClick={handleEdit}>Save</button>
-              </div>
-            ) : (
-              <div className={task.completed ? "completed" : "uncompleted"}>
-                <Checkbox
-                  type="checkbox"
-                  checked={task.completed}
-                  onChange={handleCheckboxChange}
-                />
-                <span
+      <Col>
+        <div
+          className="ToDoItem"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            margin: "5px",
+            justifyContent: "space-between",
+          }}
+        >
+          {isEditing ? (
+            <div>
+              <input
+                type="text"
+                value={newText}
+                onChange={(e) => setNewText(e.target.value)}
+                style={{ marginRight: "10px" }}
+              />
+              <button onClick={handleEdit}>Save</button>
+            </div>
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flex: 1,
+              }}
+            >
+              <Checkbox
+                checked={task.completed}
+                onChange={handleCheckboxChange}
+                style={{ marginRight: "10px" }}
+              />
+              <span
+                style={{
+                  textDecoration: task.completed ? "line-through" : "none",
+                  marginRight: "10px",
+                  flex: 1,
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Paragraph
+                  ellipsis={
+                    !expanded
+                      ? { rows: 1, symbol: "more" }
+                      : false
+                  }
                   style={{
-                    textDecoration: task.completed ? "line-through" : "none",
+                    maxWidth: expanded ? "100%" : "250px",  
+                    margin: 0,
+                    whiteSpace: expanded ? "normal" : "nowrap", 
+                    overflow: expanded ? "visible" : "hidden",  
+                    textOverflow: expanded ? "clip" : "ellipsis",
                   }}
                 >
-                  <Text
-                    strong
-                    style={{
-                      display: "inline-block",
-                      width: "50px",
-                      textAlign: "center",
-                    }}
-                  >
-                    {task.text}
-                  </Text>
-                </span>
+                  {task.text}
+                </Paragraph>
+                {task.text.length > 25 && (
+                  <a onClick={toggleExpand} style={{ marginLeft: '10px' }}>
+                    {expanded ? "Collapse" : "more"}
+                  </a>
+                )}
+              </span>
+              <div style={{ display: "flex", alignItems: "center" }}>
                 <Button
                   onClick={() => setIsEditing(true)}
                   type="primary"
                   size="default"
                   style={{ marginRight: "5px" }}
                   icon={<EditOutlined />}
-                >
-                  edit
-                </Button>
+                />
                 <Button
                   className="delete"
                   onClick={() => deleteTask(task.id)}
-                  style={{ marginLeft: "5px" }}
                   type="primary"
                   size="default"
                   icon={<DeleteOutlined />}
-                >
-                  delete
-                </Button>
+                />
               </div>
-            )}
-          </div>
-        </Col>
-      </Row>
+            </div>
+          )}
+        </div>
+      </Col>
     </ConfigProvider>
   );
 }
