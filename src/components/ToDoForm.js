@@ -21,6 +21,12 @@ function ToDoForm({ addTask }) {
     setTask("");
   }
 
+  function handleKeyPress(e) {
+    if (e.key === "Enter") {
+      handleAddTask(e);
+    }
+  }
+
   return (
     <Col>
       <div className="ToDoForm">
@@ -32,6 +38,7 @@ function ToDoForm({ addTask }) {
               setTask(e.target.value);
               setEmptyField(false);
             }}
+            onKeyPress={handleKeyPress} 
             style={{
               borderColor: emptyField ? "red" : undefined,
               transition: "border-color 0.3s ease",

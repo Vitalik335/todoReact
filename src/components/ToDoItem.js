@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  SaveOutlined,
+  CloseCircleFilled,
+} from "@ant-design/icons";
 import { Button, ConfigProvider, Checkbox, Typography, Col } from "antd";
 import { createStyles } from "antd-style";
 
@@ -44,6 +49,11 @@ function ToDoItem({ task, deleteTask, editTask, statusTask }) {
     setIsEditing(false);
   };
 
+  const handleCancelEdit = () => {
+    setNewText(task.text); // Сбросить текст задачи к исходному
+    setIsEditing(false); // Завершить редактирование
+  };
+
   const handleCheckboxChange = () => {
     const newCompletedStatus = !task.completed;
     statusTask(task.id, newCompletedStatus);
@@ -77,7 +87,24 @@ function ToDoItem({ task, deleteTask, editTask, statusTask }) {
                 onChange={(e) => setNewText(e.target.value)}
                 style={{ marginRight: "10px" }}
               />
-              <button onClick={handleEdit}>Save</button>
+              <Button
+                onClick={handleEdit}
+                type="primary"
+                size="default"
+                style={{ marginRight: "5px" }}
+                icon={<SaveOutlined />}
+              >
+                Save
+              </Button>
+              <Button
+                onClick={handleCancelEdit}
+                type="primary"
+                size="default"
+                style={{ marginRight: "5px" }}
+                icon={<CloseCircleFilled />}
+              >
+                Cancel
+              </Button>
             </div>
           ) : (
             <div
@@ -102,23 +129,19 @@ function ToDoItem({ task, deleteTask, editTask, statusTask }) {
                 }}
               >
                 <Paragraph
-                  ellipsis={
-                    !expanded
-                      ? { rows: 1, symbol: "more" }
-                      : false
-                  }
+                  ellipsis={!expanded ? { rows: 1, symbol: "more" } : false}
                   style={{
-                    maxWidth: expanded ? "100%" : "250px",  
+                    maxWidth: expanded ? "100%" : "250px",
                     margin: 0,
-                    whiteSpace: expanded ? "normal" : "nowrap", 
-                    overflow: expanded ? "visible" : "hidden",  
+                    whiteSpace: expanded ? "normal" : "nowrap",
+                    overflow: expanded ? "visible" : "hidden",
                     textOverflow: expanded ? "clip" : "ellipsis",
                   }}
                 >
                   {task.text}
                 </Paragraph>
                 {task.text.length > 25 && (
-                  <a onClick={toggleExpand} style={{ marginLeft: '10px' }}>
+                  <a onClick={toggleExpand} style={{ marginLeft: "10px" }}>
                     {expanded ? "Collapse" : "more"}
                   </a>
                 )}
